@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api/authApi';
+import { registerUser } from '../api/authApi.js';
+import './FormStyles.css'; // Import shared form styles
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -22,16 +23,24 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        {/* ... form inputs for username, email, password ... */}
-        <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-        <button type="submit">Register</button>
+        <div className="form-group">
+          <label>Username</label>
+          <input type="text" value={username} onChange={e => setUsername(e.target.value)} required />
+        </div>
+        <div className="form-group">
+          <label>Email</label>
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        </div>
+        <button type="submit" className="form-button">Register</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="form-error">{error}</p>}
     </div>
   );
 };

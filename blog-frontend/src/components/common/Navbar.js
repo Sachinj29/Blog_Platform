@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth.js';
+import './Navbar.css'; // Import the CSS file
 
 const Navbar = () => {
   const { token, logout } = useAuth();
@@ -12,17 +13,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', background: '#eee' }}>
-      <div>
-        <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
+    <nav className="navbar">
+      <div className="navbar-links">
+        <Link to="/">Home</Link>
         {token && <Link to="/create-post">Create Post</Link>}
       </div>
-      <div>
+      <div className="navbar-auth">
         {token ? (
           <button onClick={handleLogout}>Logout</button>
         ) : (
           <>
-            <Link to="/login" style={{ marginRight: '1rem' }}>Login</Link>
+            <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
           </>
         )}

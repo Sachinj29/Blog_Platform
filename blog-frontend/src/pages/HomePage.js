@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getAllPosts } from '../api/postApi';
-import PostCard from '../components/posts/PostCard';
+import { getAllPosts } from '../api/postApi.js'; // Added .js
+import PostCard from '../components/posts/PostCard.js'; // Added .js
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPost } from '../api/postApi';
-import PostForm from '../components/posts/PostForm';
+import { createPost } from '../api/postApi.js'; // Added .js
+import PostForm from '../components/posts/PostForm.js'; // Added .js
 
 const CreatePostPage = () => {
   const navigate = useNavigate();

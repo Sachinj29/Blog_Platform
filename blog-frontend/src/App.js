@@ -1,12 +1,12 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/common/Navbar';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import PostDetailsPage from './pages/PostDetailsPage';
-import CreatePostPage from './pages/CreatePostPage';
-import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/common/Navbar.js'; // Added .js
+import HomePage from './pages/HomePage.js'; // Added .js
+import LoginPage from './pages/LoginPage.js'; // Added .js
+import RegisterPage from './pages/RegisterPage.js'; // Added .js
+import PostDetailsPage from './pages/PostDetailsPage.js'; // Added .js
+import CreatePostPage from './pages/CreatePostPage.js'; // Added .js
+import { AuthProvider } from './context/AuthContext.js'; // Added .js
 import './App.css';
 
 function App() {
