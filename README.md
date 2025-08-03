@@ -49,8 +49,8 @@ Follow these instructions to get the project up and running on your local machin
 
 1.  **Clone the repository:**
     ```
-    git clone https://github.com/your-username/your-repo-name.git
-    cd your-repo-name
+    git clone https://github.com/Sachinj29/Blog_Platform.git
+    cd Blog_Platform
     ```
 
 2.  **Create the PostgreSQL Database:**
