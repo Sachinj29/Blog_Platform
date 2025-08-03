@@ -1,25 +1,26 @@
 package com.sachin.blog.service;
 
 import com.sachin.blog.dto.PostRequestDto;
-import com.sachin.blog.dto.PostResponseDto; // <-- Add this import
+import com.sachin.blog.dto.PostResponseDto;
 import com.sachin.blog.exception.ResourceNotFoundException;
+import com.sachin.blog.exception.UnauthorizedException; // <-- NEW IMPORT
 import com.sachin.blog.model.*;
 import com.sachin.blog.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // <-- Add this import
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors; // <-- Add this import
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
 
-    // ... (Your existing @Autowired fields are fine)
     @Autowired
     private PostRepository postRepository;
     @Autowired
@@ -29,9 +30,7 @@ public class PostService {
     @Autowired
     private TagRepository tagRepository;
 
-
-    // MODIFICATION 1: Change the return type of getAllPosts
-    @Transactional(readOnly = true) // Important for lazy loading to work during conversion
+    @Transactional(readOnly = true)
     public List<PostResponseDto> getAllPosts() {
         return postRepository.findAll()
                 .stream()
@@ -39,29 +38,22 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    // MODIFICATION 2: Change the return type of createPost
+    // NEW: Get a single post by its ID
+    @Transactional(readOnly = true)
+    public PostResponseDto getPostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+        return convertToDto(post);
+    }
+
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User author = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+        User author = getCurrentUser();
 
         Category category = categoryRepository.findById(postRequest.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "id", postRequest.getCategoryId()));
 
-        Set<Tag> postTags = new HashSet<>();
-        if (postRequest.getTags() != null) {
-            for (String tagName : postRequest.getTags()) {
-                Tag tag = tagRepository.findByName(tagName)
-                        .orElseGet(() -> {
-                            Tag newTag = new Tag();
-                            newTag.setName(tagName);
-                            return tagRepository.save(newTag);
-                        });
-                postTags.add(tag);
-            }
-        }
+        Set<Tag> postTags = findOrCreateTags(postRequest.getTags());
 
         Post post = new Post();
         post.setTitle(postRequest.getTitle());
@@ -71,10 +63,45 @@ public class PostService {
         post.setTags(postTags);
 
         Post savedPost = postRepository.save(post);
-        return convertToDto(savedPost); // Convert to DTO before returning
+        return convertToDto(savedPost);
     }
 
-    // NEW METHOD: Add this private helper method to the class
+    // NEW: Logic to update a post
+    @Transactional
+    public PostResponseDto updatePost(Long id, PostRequestDto postRequest) {
+        Post postToUpdate = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+
+        checkAuthorization(postToUpdate);
+
+        Category category = categoryRepository.findById(postRequest.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", postRequest.getCategoryId()));
+
+        Set<Tag> postTags = findOrCreateTags(postRequest.getTags());
+
+        postToUpdate.setTitle(postRequest.getTitle());
+        postToUpdate.setContent(postRequest.getContent());
+        postToUpdate.setCategory(category);
+        postToUpdate.getTags().clear();
+        postToUpdate.getTags().addAll(postTags);
+
+        Post updatedPost = postRepository.save(postToUpdate);
+        return convertToDto(updatedPost);
+    }
+
+    // NEW: Logic to delete a post
+    @Transactional
+    public void deletePost(Long id) {
+        Post postToDelete = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+
+        checkAuthorization(postToDelete);
+
+        postRepository.delete(postToDelete);
+    }
+
+    // --- Helper Methods ---
+
     private PostResponseDto convertToDto(Post post) {
         PostResponseDto dto = new PostResponseDto();
         dto.setId(post.getId());
@@ -83,7 +110,6 @@ public class PostService {
         dto.setCreatedAt(post.getCreatedAt());
         dto.setUpdatedAt(post.getUpdatedAt());
 
-        // This is where lazy-loaded properties are safely accessed
         if (post.getAuthor() != null) {
             dto.setAuthorUsername(post.getAuthor().getUsername());
         }
@@ -95,5 +121,39 @@ public class PostService {
         }
 
         return dto;
+    }
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    }
+
+    private Set<Tag> findOrCreateTags(Set<String> tagNames) {
+        Set<Tag> tags = new HashSet<>();
+        if (tagNames != null) {
+            for (String tagName : tagNames) {
+                Tag tag = tagRepository.findByName(tagName)
+                        .orElseGet(() -> {
+                            Tag newTag = new Tag();
+                            newTag.setName(tagName);
+                            return tagRepository.save(newTag);
+                        });
+                tags.add(tag);
+            }
+        }
+        return tags;
+    }
+
+    // NEW: Authorization helper method
+    private void checkAuthorization(Post post) {
+        User currentUser = getCurrentUser();
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+
+        if (!post.getAuthor().getUsername().equals(currentUser.getUsername()) && !isAdmin) {
+            throw new UnauthorizedException("You are not authorized to modify this post.");
+        }
     }
 }
