@@ -32,20 +32,90 @@ A robust, secure, and feature-rich RESTful API for a blog platform. This project
 | **Lombok** | Reduces boilerplate code (getters, setters, constructors). |
 | **Maven** | Dependency management and project build tool. |
 
-## 📁 Project Structure
-
-The project follows a standard layered architecture to ensure separation of concerns and maintainability.
-
-src/main/java/com/sachin/blog/
-├── config/ # Spring Security and Data Initialization configuration
-├── controller/ # REST API controllers (handling HTTP requests)
-├── dto/ # Data Transfer Objects (for API requests and responses)
-├── exception/ # Custom exception classes and global handler
-├── model/ # JPA entity classes (database table mappings)
-├── repository/ # Spring Data JPA repositories (for database operations)
-├── security/ # JWT and UserDetailsService implementation
-└── service/ # Business logic layer
 
 
 
+## ⚙️ Getting Started
 
+Follow these instructions to get the project up and running on your local machine.
+
+### Prerequisites
+
+*   Java (JDK) 17 or later
+*   Apache Maven
+*   PostgreSQL Server
+
+### Installation & Configuration
+
+1.  **Clone the repository:**
+    ```
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+
+2.  **Create the PostgreSQL Database:**
+    *   Open your PostgreSQL client (e.g., pgAdmin, DBeaver).
+    *   Create a new database named `blog_platform`.
+
+3.  **Configure the Application:**
+    *   Navigate to `src/main/resources/`.
+    *   Open the `application.properties` file.
+    *   Update the `spring.datasource.url`, `spring.datasource.username`, and `spring.datasource.password` properties to match your PostgreSQL setup.
+    *   Replace the `app.jwt.secret` with your own unique, Base64-encoded secret key of at least 512 bits.
+
+    ```
+    # PostgreSQL Database Configuration
+    spring.datasource.url=jdbc:postgresql://localhost:5432/blog_platform
+    spring.datasource.username=your_postgres_username
+    spring.datasource.password=your_postgres_password
+
+    # JWT Secret Configuration
+    app.jwt.secret=c29tZXRoaW5nLXJlYWxseS1zZWNyZXQtYW5kLWxvbmctZW5vdWdoLWZvci10aGUtSFM1MTItYWxnb3JpdGhtLW11c3QtYmUtbW9yZS10aGFuLTUxMi1iaXRz
+    ```
+
+4.  **Run the application:**
+    *   You can run the application using your IDE (like IntelliJ IDEA) by running the `BlogApplication.java` file.
+    *   Or, you can run it from the command line using Maven:
+        ```
+        mvn spring-boot:run
+        ```
+    The application will start on `http://localhost:8081`.
+
+## 📖 API Documentation
+
+The API is designed to be tested with tools like Postman.
+
+### Authentication
+
+| Endpoint | Method | Description | Auth Required? | Request Body |
+| :--- | :--- | :--- |:--- |:--- |
+| `/api/auth/register` | `POST` | Registers a new user. | No | `{ "username": "...", "email": "...", "password": "..." }` |
+| `/api/auth/login` | `POST` | Authenticates a user and returns a JWT. | No | `{ "username": "...", "password": "..." }` |
+
+**Workflow:** Always `/register` first, then `/login` to get the Bearer Token for authenticated requests.
+
+### Posts
+
+| Endpoint | Method | Description | Auth Required? | Request Body |
+| :--- | :--- | :--- |:--- |:--- |
+| `/api/posts` | `GET` | Retrieves a list of all posts. | No | (None) |
+| `/api/posts` | `POST` | Creates a new post. | Yes | `{ "title": "...", "content": "...", "categoryId": 1, "tags": ["tag1"] }` |
+| `/api/posts/{id}` | `GET` | Gets a single post by its ID. | No | (None) |
+| `/api/posts/{id}` | `PUT` | Updates an existing post. | Yes (Author/Admin) | `{ "title": "...", "content": "...", "categoryId": 1, "tags": [...] }` |
+| `/api/posts/{id}` | `DELETE` | Deletes a post. | Yes (Author/Admin) | (None) |
+
+### Comments
+
+| Endpoint | Method | Description | Auth Required? | Request Body |
+| :--- | :--- | :--- |:--- |:--- |
+| `/api/posts/{postId}/comments` | `GET` | Retrieves all comments for a post. | No | (None) |
+| `/api/posts/{postId}/comments` | `POST` | Adds a new comment to a post. | Yes | `{ "content": "..." }` |
+
+### Categories
+
+| Endpoint | Method | Description | Auth Required? | Request Body |
+| :--- | :--- | :--- |:--- |:--- |
+| `/api/categories` | `GET` | Retrieves all categories. | No | (None) |
+| `/api/categories` | `POST` | Creates a new category. | Yes (Admin only) | `{ "name": "..." }` |
+
+---
