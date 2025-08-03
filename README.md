@@ -36,3 +36,16 @@ A robust, secure, and feature-rich RESTful API for a blog platform. This project
 
 The project follows a standard layered architecture to ensure separation of concerns and maintainability.
 
+src/main/java/com/sachin/blog/
+├── config/ # Spring Security and Data Initialization configuration
+├── controller/ # REST API controllers (handling HTTP requests)
+├── dto/ # Data Transfer Objects (for API requests and responses)
+├── exception/ # Custom exception classes and global handler
+├── model/ # JPA entity classes (database table mappings)
+├── repository/ # Spring Data JPA repositories (for database operations)
+├── security/ # JWT and UserDetailsService implementation
+└── service/ # Business logic layer
+
+
+
+
