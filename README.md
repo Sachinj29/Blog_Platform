@@ -39,6 +39,13 @@ To showcase its capabilities, the project also includes a functional React front
 | **Maven** | Dependency management and project build tool. |
 
 
+## 🛡️ Security Architecture
+
+The project employs a robust, two-layered security approach to protect user data and secure API endpoints.
+
+*   **Password Hashing (bcrypt):** All user passwords are **never stored in plain text**. They are securely hashed using the industry-standard **bcrypt** algorithm (`BCryptPasswordEncoder`). Bcrypt is an adaptive hashing function that is intentionally slow and includes a random salt, making it highly resistant to brute-force and rainbow table attacks.
+
+*   **API Security (HMAC-SHA512):** API endpoints are secured using JSON Web Tokens (JWTs). Each token is digitally signed using the strong **HMAC-SHA512 (HS512)** algorithm and a confidential secret key. This signature guarantees two things: **Authentication** (the token was issued by our server) and **Integrity** (the token's data has not been tampered with since it was issued).
 
 
 ## ⚙️ Getting Started
