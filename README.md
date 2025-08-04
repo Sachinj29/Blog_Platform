@@ -125,7 +125,7 @@ The API is designed to be tested with tools like Postman.
 
 ### 🎨 Frontend (React UI)
 
-The frontend is a dynamic and responsive Single-Page Application (SPA) built with React. It provides a clean, modern user interface for interacting with the backend API, allowing users to register, log in, view posts, and create new content in a seamless experience.
+The frontend is a dynamic and responsive Single-Page Application (SPA) built with React. It provides a clean, modern user interface for interacting with the backend API, allowing users to register, log in, view posts, create new content, and manage their own posts in a seamless experience.
 
 #### Frontend Technology Stack
 
@@ -135,6 +135,7 @@ The frontend is a dynamic and responsive Single-Page Application (SPA) built wit
 | **React Router** | For client-side routing and navigation between pages. |
 | **Axios** | A promise-based HTTP client for making API calls to the backend. |
 | **React Context API** | Used for global state management, specifically for user authentication. |
+| **jwt-decode** | A small library to decode JWTs on the client-side to access user information. |
 | **CSS** | Custom CSS for a modern, animated, and responsive design. |
 
 #### UI Features Implemented
@@ -142,8 +143,12 @@ The frontend is a dynamic and responsive Single-Page Application (SPA) built wit
 *   **Responsive Navbar:** A sticky navigation bar that changes dynamically based on the user's authentication status.
 *   **User Authentication:** Clean and user-friendly forms for user registration and login.
 *   **Homepage Feed:** Displays all blog posts in a clean, card-based layout with hover animations.
-*   **Post Details Page:** A dedicated page to view the full content of a single post and its associated comments.
-*   **Protected Routes:** The "Create Post" page is only accessible to users who are logged in.
+*   **Full Post Management (CRUD):**
+    *   **Create:** Logged-in users can access a dedicated page with a form to create new posts.
+    *   **Read:** Anyone can view a list of all posts or click on a post to see its full details and comments.
+    *   **Update:** A dedicated "Edit Post" page pre-populates a form with the post's existing content for easy editing.
+    *   **Delete:** Users can delete their posts with a confirmation step to prevent accidental deletions.
+*   **Conditional UI and Authorization:** The "Edit" and "Delete" buttons are dynamically rendered on the Post Details page, visible **only** to the original author of the post, ensuring users can only manage their own content.
 
 #### Running the Frontend
 
