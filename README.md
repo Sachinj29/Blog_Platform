@@ -8,7 +8,10 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
 
-A robust, secure, and feature-rich RESTful API for a blog platform. This project serves as the complete backend for a content management system, handling users, roles, posts, comments, categories, and tags. It is built with a modern Java stack and follows best practices for API development, including JWT-based security and a clean, layered architecture.
+The core of this project is a robust, secure, and feature-rich RESTful API for a blog platform. Built with a modern Java stack (Spring Boot, Spring Security), the backend provides a comprehensive content management system, handling users, roles, posts, comments, categories, and tags. It emphasizes API development best practices through JWT-based security and a clean, layered architecture.
+
+To showcase its capabilities, the project also includes a functional React frontend. This optional UI client demonstrates how to consume the API for user registration, login, and post management, serving as a practical example of a client application.
+
 
 ## ✨ Key Features
 
