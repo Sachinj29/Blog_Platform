@@ -118,4 +118,54 @@ The API is designed to be tested with tools like Postman.
 | `/api/categories` | `GET` | Retrieves all categories. | No | (None) |
 | `/api/categories` | `POST` | Creates a new category. | Yes (Admin only) | `{ "name": "..." }` |
 
+
+
+### 🎨 Frontend (React UI)
+
+The frontend is a dynamic and responsive Single-Page Application (SPA) built with React. It provides a clean, modern user interface for interacting with the backend API, allowing users to register, log in, view posts, and create new content in a seamless experience.
+
+#### Frontend Technology Stack
+
+| Technology | Description |
+| :--- | :--- |
+| **React** | The core library for building the user interface. |
+| **React Router** | For client-side routing and navigation between pages. |
+| **Axios** | A promise-based HTTP client for making API calls to the backend. |
+| **React Context API** | Used for global state management, specifically for user authentication. |
+| **CSS** | Custom CSS for a modern, animated, and responsive design. |
+
+#### UI Features Implemented
+
+*   **Responsive Navbar:** A sticky navigation bar that changes dynamically based on the user's authentication status.
+*   **User Authentication:** Clean and user-friendly forms for user registration and login.
+*   **Homepage Feed:** Displays all blog posts in a clean, card-based layout with hover animations.
+*   **Post Details Page:** A dedicated page to view the full content of a single post and its associated comments.
+*   **Protected Routes:** The "Create Post" page is only accessible to users who are logged in.
+
+#### Running the Frontend
+
+To run the frontend application locally, follow these steps.
+
+**Prerequisites:**
+*   Node.js and npm
+*   **Important:** The backend Spring Boot server must be running first.
+
+1.  **Navigate to the frontend directory:**
+    ```
+    cd blog-frontend
+    ```
+
+2.  **Install dependencies:**
+    This will install React and all other necessary libraries.
+    ```
+    npm install
+    ```
+
+3.  **Start the development server:**
+    ```
+    npm start
+    ```
+    The application will automatically open in your browser at `http://localhost:3000`.
+
+
 ---
