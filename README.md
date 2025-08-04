@@ -6,6 +6,8 @@
 ![Maven](https://img.shields.io/badge/Maven-4.0.0-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Postman](https://img.shields.io/badge/Postman-API_Testing-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+
 
 
 The core of this project is a robust, secure, and feature-rich RESTful API for a blog platform. Built with a modern Java stack (Spring Boot, Spring Security), the backend provides a comprehensive content management system, handling users, roles, posts, comments, categories, and tags. It emphasizes API development best practices through JWT-based security and a clean, layered architecture.
